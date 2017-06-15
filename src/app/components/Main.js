@@ -1,6 +1,19 @@
 import React from "react";
 
 export class Main extends React.Component {
+    constructor(){
+        super();
+        this.state = {
+            name: ""
+        }
+    }
+
+    updateName(e){
+        this.setState({
+            name: e.target.value
+        });
+    }
+    
     render() {
         return (
             <div>
@@ -11,9 +24,10 @@ export class Main extends React.Component {
                 </div>
                 <div className="row">
                     <div className="col-xs-12">
+                        <input onChange={(e) => this.updateName(e) } value={this.state.name}/>
                         <button
                             className="btn btn-primary"
-                            onClick={() => this.props.changeUsername('Anna')}>Change the Username</button>
+                            onClick={() => this.props.changeUsername(this.state.name)}>Change the Username</button>
                     </div>
                 </div>
             </div>

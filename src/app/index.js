@@ -1,6 +1,7 @@
 import React from "react";
 import {render} from "react-dom";
 import App from './components/App';
+import { Provider } from "react-redux";
 
 
 // Self-explanatory
@@ -70,7 +71,7 @@ const myLogger = (store) => (next) => (action) => {
 // Everything that follows is optional
 const store = createStore(
     // Reducers
-    combineReducers({mathReducer, userReducer}),
+    combineReducers({math: mathReducer, user: userReducer}),
     // Initial State (will be overwritten by the reducers)
     {}, 
     // middleware can be chained as arguments
@@ -82,4 +83,9 @@ const store = createStore(
 //     console.log("Store Updated", store.getState());
 // })
 
-render(<App />, window.document.getElementById('app'));
+render(
+    // Provider connects the store to the app! 
+    <Provider store={store}>
+        <App />
+    </Provider>, 
+    window.document.getElementById('app'));

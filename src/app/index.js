@@ -31,7 +31,8 @@ import {render} from "react-dom";
 // render(<App />, window.document.getElementById('app'));
 
 // Self-explanatory
-import { createStore, combineReducers } from "redux";
+import { createStore, combineReducers, applyMiddleware } from "redux";
+import logger from "redux-logger";
 
 // When creating the reducer, it should take two arguments: state and action
 const mathReducer = (state = {
@@ -86,13 +87,27 @@ const userReducer = (state = {
     return state;
 };
 
-// A store initializes with two arguments: the reducer and the initial state
-const store = createStore(combineReducers({mathReducer, userReducer}));
+// Creating a middleware
+const myLogger = (store) => (next) => (action) => {
+    console.log("Logged Action:", action);
+    next(action);
+}
 
-store.subscribe(() => {
-    // getState is built in and gets the current state
-    console.log("Store Updated", store.getState());
-})
+// A store initializes with one required argument: the reducer
+// Everything that follows is optional
+const store = createStore(
+    // Reducers
+    combineReducers({mathReducer, userReducer}),
+    // Initial State (will be overwritten by the reducers)
+    {}, 
+    // middleware can be chained as arguments
+    applyMiddleware(logger)
+    );
+
+// store.subscribe(() => {
+//     // getState is built in and gets the current state
+//     console.log("Store Updated", store.getState());
+// })
 
 // Dispatch method expects a JS object
 // Typically with a property type and payload (a lot pkgs use payload)
